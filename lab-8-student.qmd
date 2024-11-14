@@ -1,9 +1,17 @@
 ---
 title: "Lab 8: Searching for Efficiency"
-author: "Your name here!"
+author: "Zack Kramer"
 format: html
 editor: source
 embed-resources: true
+code-tools: true
+toc: true
+code-fold: true
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
 
 ```{r}
