@@ -18,6 +18,7 @@ execute:
 #| label: pacakges
 
 library(tidyverse)
+library(kableExtra)
 ```
 
 For this week's lab, we will be revisiting questions from previous lab
@@ -57,7 +58,9 @@ surveys |>
   bind_cols(Name = names(surveys)) |>
   rename('Type' = 1) |>
   pivot_wider(names_from = Name,
-              values_from = Type)
+              values_from = Type) |>
+  kable(format = "html") |>
+  kable_styling()
 ```
 
 ## Lab 3
@@ -82,7 +85,7 @@ evals <- evals |>
            "seniority", 
            "gender"), 
          .f = as.factor) |>
-  bind_cols()
+  bind_cols() 
 
 evals
 
@@ -117,8 +120,24 @@ evals |>
                              "junior",
                              "senior")) |>
   group_by(sex, SEN_level, academic_degree) |>
-  summarize(distinct_vals = n_distinct(teacher_id)) 
-#  pivot_longer(cols = distinct_vals)
+  summarize(distinct_vals = n_distinct(teacher_id)) |>
+  ungroup() |>
+  pivot_longer(cols = c(sex, SEN_level, academic_degree)) |>
+  group_by(value) |>
+  summarize(num = sum(distinct_vals)) |>
+  pivot_wider(names_from = value,
+              values_from = num) |>
+  select(female, male, junior, senior, no_dgr, ma, dr, prof) |>
+  rename(Female = female,
+         Male = male,
+         "Junior (4 years of less)" = junior,
+         "Senior (more than 4 years)" = senior,
+         "No Degree" = no_dgr,
+         Masters = ma,
+         Doctorate = dr, 
+         Professor = prof) |>
+  kable(format = "html") |>
+  kable_styling("striped")
 
 ```
 
@@ -142,5 +161,7 @@ Question 1 asked you to use `across()` to make a table which summarized:
 ```{r}
 #| label: map-missing-values-of-fish
 
+fish |>
+  map_int(.f = ~ sum(is.na(.x))) 
 
 ```
